@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "git@github.com:quirkles/object-transform.git",
   "author": "quirkles",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jest": "^21.2.1"
+  }
 }
