@@ -1,0 +1,9 @@
+{
+  "name": "object-map",
+  "version": "0.0.0",
+  "description": "A lib to map one object to another",
+  "main": "index.js",
+  "repository": "git@github.com:quirkles/object-transform.git",
+  "author": "quirkles",
+  "license": "MIT"
+}
