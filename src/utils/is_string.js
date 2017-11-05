@@ -1,1 +1,0 @@
-export default var_to_check => var_to_check instanceof String
