@@ -1,5 +1,15 @@
 {
   "extends": [
-    "prettier"
-  ]
+    "airbnb"
+  ],
+  "rules": {
+    "camelcase": 0,
+    "semi": 0
+  },
+  "plugins": [
+    "jest"
+  ],
+  "env": {
+    "jest/globals": true
+  }
 }
