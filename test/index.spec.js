@@ -1,4 +1,4 @@
-import create_mapper, { take, each, concat, same, from_schema } from '../src/index'
+import create_mapper, { get, each, join, shape } from '../src/index'
 
 describe('Create mapper', () => {
   it('maps correctly', () => {
@@ -32,17 +32,13 @@ describe('Create mapper', () => {
       },
     }
 
-
-    const is_dog = ({ type }) => type === 'dog';
     const schema = {
-      name: concat(['first_name', 'last_name'], '_'),
-      age: take('current_age'),
-      occupation: same(),
-      pet_names: each('pets').take('name'),
-      dog_ages: each('pets').where(is_dog).take('age'),
-      contact_information: from_schema({
-        email: same(),
-        street_address: concat(['address.street_number', 'address.street_name', 'address.city'], ' '),
+      name: join(['first_name', 'last_name'], '_'),
+      age: get('current_age'),
+      occupation: get('occupation'),
+      contact_information: shape({
+        email: get('email'),
+        street_address: join(['address.street_number', 'address.street_name', 'address.city'], ' '),
       }),
     }
 
@@ -52,8 +48,6 @@ describe('Create mapper', () => {
       name: 'pete_jones',
       age: 15,
       occupation: 'Retail',
-      pet_names: ['bruce', 'pickles', 'buddy'],
-      dog_ages: [9],
       contact_information: {
         email: 'pjones@gmail.com',
         street_address: '55 Queen St Toronto',

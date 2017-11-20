@@ -54,6 +54,7 @@ describe('Create mapper', () => {
 
 ## Api
 
+
 ### concat
 ### take
 ### each

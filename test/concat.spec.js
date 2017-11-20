@@ -1,42 +1,30 @@
 import concat from '../src/concat'
+import get from '../src/get'
+import each from '../src/each'
 
-describe('Concat', () => {
-  it('returns a function that concats fields', () => {
+describe('concat', () => {
+  it('joins together lists', () => {
     const input = {
-      first_name: 'sally',
-      middle_name: 'mary',
-      last_name: 'albright',
-    }
-    const get_name = concat(['first_name', 'last_name'])
-    expect(get_name(input)).toEqual('sally albright')
-  })
-  it('returns a function that concats fields, looks up nested values', () => {
-    const input = {
-      name: {
-        first_name: 'sally',
-        middle_name: 'mary',
-        last_name: 'albright',
+      partner: {
+        name: 'Stephanie Miles',
       },
+      kids:
+        [
+          {
+            firstName: 'Pete',
+            lastName: 'Miles',
+          },
+          {
+            firstName: 'Alice',
+            lastName: 'Miles',
+          },
+        ],
     }
-    const get_name = concat(['name.first_name', 'name.last_name'])
-    expect(get_name(input)).toEqual('sally albright')
-  })
-  it('Accepts a second argument that creates a default if not set, handles missing props', () => {
-    const input = {
-      first_name: 'sally',
-      middle_name: 'mary',
-      last_name: 'albright',
-    }
-    const get_name = concat(['first_name', 'missing_name'])
-    expect(get_name(input)).toEqual('sally')
-  })
-  it('Accepts a second argument that creates a default if not set, handles optionsal separator', () => {
-    const input = {
-      first_name: 'sally',
-      middle_name: 'mary',
-      last_name: 'albright',
-    }
-    const get_name = concat(['first_name', 'middle_name', 'last_name'], '-')
-    expect(get_name(input)).toEqual('sally-mary-albright')
+    const getNameFromKid = kid => `${kid.firstName} ${kid.lastName}`
+    const familyNames = concat(
+      get('partner.name'),
+      each('kids').map(getNameFromKid),
+    )
+    expect(familyNames(input)).toEqual(['Stephanie Miles', 'Pete Miles', 'Alice Miles'])
   })
 })
