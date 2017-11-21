@@ -1,8 +1,8 @@
 {
   "name": "object-mapper",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A lib to map one object to another",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "git@github.com:quirkles/object-transform.git",
   "author": "quirkles",
   "license": "MIT",
