@@ -1,7 +1,7 @@
-import { fMap, fChain, filterNulls, arrWrap, replaceLast } from "../src/utils"
+import { fMap, fChain, filterNulls, arrWrap, replaceLast, doIfNotEmpty, doIfNotNull } from '../src/utils'
 
 describe('fMap', () => {
-  const double = n => 2*n
+  const double = n => 2 * n
   const numbers = [2, 3, 4, 5]
   it('Flips map', () => {
     expect(fMap(numbers, double)).toEqual([4, 6, 8, 10])
@@ -13,7 +13,7 @@ describe('fMap', () => {
 })
 
 describe('fChain', () => {
-  const doubleAndWrapInArray = n => [n*2]
+  const doubleAndWrapInArray = n => [n * 2]
   const numbers = [2, 3, 4, 5]
   it('Flips chain', () => {
     expect(fChain(numbers, doubleAndWrapInArray)).toEqual([4, 6, 8, 10])
@@ -60,6 +60,27 @@ describe('replaceLast', () => {
   it('works on list', () => {
     const original = [false, false, false]
     expect(replaceLast(true, original)).toEqual([false, false, true])
+  })
+})
+
+
+describe('doIfNotNull', () => {
+  it('Does a function on a thing, if that thing is not null', () => {
+    const double = n => n * 2
+    const doubleIfNotNull = doIfNotNull(double)
+    expect(doubleIfNotNull(5)).toEqual(10)
+    expect(doubleIfNotNull(111)).toEqual(222)
+    expect(doubleIfNotNull(null)).toEqual(null)
+  })
+})
+
+describe('doIfNotEmpty', () => {
+  it('Does a function on an array, if that array is not empty', () => {
+    const sum = arr => arr.reduce((total, n) => total + n)
+    const sumIfNotEmpty = doIfNotEmpty(sum)
+    expect(sumIfNotEmpty([1, 2, 3])).toEqual(6)
+    expect(sumIfNotEmpty([6, 7, 8])).toEqual(21)
+    expect(sumIfNotEmpty([])).toEqual(null)
   })
 })
 

@@ -5,7 +5,7 @@ import get from './get'
 import join from './join'
 import { shape } from './index'
 
-const getAttrAndFilter = ([attr, p]) => pipe(arrWrap, chain(get(attr)), filterNulls, filter(p))
+const getAttrAndFilter = ([attr, p]) => pipe(arrWrap, chain(get(attr, [])), filterNulls, filter(p))
 
 const getItems = (attrPath = [], predicates = [T]) => reduce(
   (result, fn) => fn(result),

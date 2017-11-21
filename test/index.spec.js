@@ -1,4 +1,4 @@
-import create_mapper, { get, each, join, shape } from '../src/index'
+import create_mapper, { get, each, join, shape, using } from '../src/index'
 
 describe('Create mapper', () => {
   it('maps correctly', () => {
@@ -52,6 +52,20 @@ describe('Create mapper', () => {
         email: 'pjones@gmail.com',
         street_address: '55 Queen St Toronto',
       },
+    })
+  })
+  it('lets you set a non fn as a value', () => {
+    const toUpper = str => str.toUpperCase()
+    const schema = {
+      name: 'fees',
+      cost: 70,
+      occupation: using('occupation').do(toUpper),
+    }
+    const mapper = create_mapper(schema)
+    expect(mapper({})).toEqual({
+      name: 'fees',
+      cost: 70,
+      occupation: null,
     })
   })
 })
