@@ -1,5 +1,5 @@
 {
-  "name": "object-map",
+  "name": "object-mapper",
   "version": "0.0.0",
   "description": "A lib to map one object to another",
   "main": "index.js",
@@ -24,6 +24,7 @@
     "eslint-plugin-react": "^7.4.0"
   },
   "scripts": {
+    "build": "babel src --out-dir dist",
     "test": "jest --testPathPattern=test"
   },
   "jest": {
