@@ -1,5 +1,5 @@
 import { pipe } from 'ramda'
-import get from '../src/get'
+import get from './get'
 
 export default (attr = '') => ({
   asString: pipe(get(attr), String),

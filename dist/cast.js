@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _ramda = require('ramda');
 
-var _get = require('../src/get');
+var _get = require('./get');
 
 var _get2 = _interopRequireDefault(_get);
 
