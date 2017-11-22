@@ -11,11 +11,11 @@ describe('cast', () => {
       const ageAsNumber = cast('age').asNumber
       expect(ageAsNumber(input)).toEqual(67)
     })
-    it('asString', () => {
+    it('asString works', () => {
       const moneyAsString = cast('money').asString
       expect(moneyAsString(input)).toEqual('4000')
     })
-    it('asBool', () => {
+    it('asBool works', () => {
       const childrenAsBool = cast('children').asBool
       expect(childrenAsBool(input)).toEqual(false)
     })

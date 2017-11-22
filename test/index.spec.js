@@ -1,11 +1,11 @@
-import create_mapper, { get, each, join, shape, using } from '../src/index'
+import createMapper, { get, each, join, shape, using } from '../src/index'
 
 describe('Create mapper', () => {
   it('maps correctly', () => {
     const input = {
-      first_name: 'pete',
-      last_name: 'jones',
-      current_age: 15,
+      firstName: 'pete',
+      lastName: 'jones',
+      currentAge: 15,
       occupation: 'Retail',
       email: 'pjones@gmail.com',
       pets: [
@@ -26,46 +26,78 @@ describe('Create mapper', () => {
         },
       ],
       address: {
-        street_number: '55',
-        street_name: 'Queen St',
+        streetNumber: '55',
+        streetName: 'Queen St',
         city: 'Toronto',
       },
     }
 
+    const isType = type => pet => pet.type === type
+
     const schema = {
-      name: join(['first_name', 'last_name'], '_'),
-      age: get('current_age'),
+      name: join(['firstName', 'lastName'], '_'),
+      age: get('currentAge'),
       occupation: get('occupation'),
+      dogAges: each('pets').where(isType('dog')).get('age'),
+      modifiedCats: each('pets').where(isType('cat')).shape({
+        description: cat => `${cat.name} the ${cat.age} year old cat`,
+        belongsToPete: true,
+      }),
       contact_information: shape({
         email: get('email'),
-        street_address: join(['address.street_number', 'address.street_name', 'address.city'], ' '),
+        street_address: join(['address.streetNumber', 'address.streetName', 'address.city'], ' '),
       }),
     }
 
-    const mapper = create_mapper(schema)
+    const mapper = createMapper(schema)
 
     expect(mapper(input)).toEqual({
-      name: 'pete_jones',
       age: 15,
-      occupation: 'Retail',
       contact_information: {
         email: 'pjones@gmail.com',
         street_address: '55 Queen St Toronto',
       },
+      dogAges: [9],
+      modifiedCats: [
+        {
+          belongsToPete: true,
+          description: 'bruce the 13 year old cat',
+        },
+        {
+          belongsToPete: true,
+          description: 'pickles the 4 year old cat',
+        },
+      ],
+      name: 'pete_jones',
+      occupation: 'Retail',
     })
   })
-  it('lets you set a non fn as a value', () => {
+  it('lets you set a non fn as a value, handles null input', () => {
     const toUpper = str => str.toUpperCase()
     const schema = {
       name: 'fees',
       cost: 70,
       occupation: using('occupation').do(toUpper),
     }
-    const mapper = create_mapper(schema)
+    const mapper = createMapper(schema)
     expect(mapper({})).toEqual({
       name: 'fees',
       cost: 70,
       occupation: null,
+    })
+  })
+  it('lets you set a non fn as a value, handles null input', () => {
+    const input = {
+      occupation: 'baller',
+    }
+    const toUpper = str => str.toUpperCase()
+    const transform = shape({
+      occupation: using('occupation').do(toUpper),
+      balls: true,
+    })
+    expect(transform(input)).toEqual({
+      occupation: 'BALLER',
+      balls: true,
     })
   })
 })
