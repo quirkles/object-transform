@@ -1,6 +1,6 @@
 {
   "name": "object-forge",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A library to facilitate massaging data",
   "main": "dist/index.js",
   "repository": "git@github.com:quirkles/object-transform.git",
