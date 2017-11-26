@@ -1,6 +1,6 @@
 {
   "name": "object-forge",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A library to facilitate massaging data. Maps a dictionary of key value pairs to another via a user defined schema",
   "keywords": ["map", "schema", "transform", "object"],
   "main": "dist/index.js",
