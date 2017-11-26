@@ -2,96 +2,89 @@
 
 This library is designed to facilitate the mapping of data into an arbitrary shape defined by the user by creating a mapper from a schema.
 
-in practise this looks something like the following:
+## Why would I need this?
+
+Lets say you have some data stored somewhere and you want to get some subsection of it of it, and maybe modify it too. An obvious example would be in a mapStateToProps function in a react/redux component. Or if you were writting some kind of interface to sit in front of a legacy backend and wanted to modify the data before passing it on.
+
+## Ok, how do I use it?
+
+On a high level:
+1. Create a Schema
+2. Create a mapper from that schema
+3. Call your mapper on the data you want to transform
+
+## Ok, whats a schema?
+
+A schema is a dictionary of keys and functions, the schema keys will match the keys in your final, mapped data. The schema values are functions that map the expected input data to the desired final values. Heres an example, say your input data looks like this
+
+````javascript
+{
+    /* Some other data  */
+    owner: {
+        firstName: "Alice",
+        lastName: "Jones"
+    }
+}
+````
+
+And you're writing a react component to display the owners name. 
+
+You'd write a function that gets the owners full name from the above object:
+
+````javascript
+const getOwnerName = input => `${input.owner.firstName} ${input.owner.lastName}`
+````
+
+Then your schema just looks like
+
+````javascript
+const ownerFullNameMapperSchema = {
+    ownerFullName: getOwnersName
+}
+````
+
+## Ok...and then I make a mappper?
+
+Yup, you import the default export from this package and call it with a schema
 
 ```javascript
-import create_mapper, { get, each, join, shape, using } from 'object-forge'
+import createMapper from 'object-forge'
 
+...
 
-describe('Create mapper', () => {
-  it('maps correctly', () => {
-    const input = {
-      firstName: 'pete',
-      lastName: 'jones',
-      currentAge: 15,
-      occupation: 'Retail',
-      email: 'pjones@gmail.com',
-      pets: [
-        {
-          type: 'cat',
-          name: 'bruce',
-          age: 13,
-        },
-        {
-          type: 'cat',
-          name: 'pickles',
-          age: 4,
-        },
-        {
-          type: 'dog',
-          name: 'buddy',
-          age: 9,
-        },
-      ],
-      address: {
-        streetNumber: '55',
-        streetName: 'Queen St',
-        city: 'Toronto',
-      },
+const ownerFullNameMapper = createMapper(ownerNameMapperSchema)
+````
+
+## Looks easy, and then what?
+
+Your mapper is a function, just call it on your input data, lets put it all together:
+
+```javascript
+import createMapper from 'object-forge'
+
+const inputData = {
+    owner: {
+        firstName: "Alice",
+        lastName: "Jones"
     }
+}
 
-    const isType = type => pet => pet.type === type
+const getOwnerFullName = input => `${input.owner.firstName} ${input.owner.lastName}`
 
-    const schema = {
-      name: join(['firstName', 'lastName'], '_'),
-      age: get('currentAge'),
-      occupation: get('occupation'),
-      dogAges: each('pets').where(isType('dog')).get('age'),
-      modifiedCats: each('pets').where(isType('cat')).shape({
-        description: cat => `${cat.name} the ${cat.age} year old cat`,
-        belongsToPete: true,
-      }),
-      contact_information: shape({
-        email: get('email'),
-        street_address: join(['address.streetNumber', 'address.streetName', 'address.city'], ' '),
-      }),
-    }
+const ownerFullNameMapperSchema = {
+    ownerFullName: getOwnerFullName
+}
 
-    const mapper = create_mapper(schema)
+const ownerFullNameMapper = createMapper(ownerFullNameMapperSchema)
 
-    expect(mapper(input)).toEqual({
-      age: 15,
-      contact_information: {
-        email: 'pjones@gmail.com',
-        street_address: '55 Queen St Toronto',
-      },
-      dogAges: [9],
-      modifiedCats: [
-        {
-          belongsToPete: true,
-          description: 'bruce the 13 year old cat',
-        },
-        {
-          belongsToPete: true,
-          description: 'pickles the 4 year old cat',
-        },
-      ],
-      name: 'pete_jones',
-      occupation: 'Retail',
-    })
-  })
-})
-```
+const transformedData = ownerFullNameMapper(inputData) // { ownerFullName: 'Alice Jones' }
+````
 
-The schema is an object of key, value pairs where the keys are the values you want in your final object and the value can be anything.
+## So, I still have to write all these functions? Isn't that what I have to do anyway?
 
-If the value is *anything other than a function* then it will just be set as value of the corresponding key in the final object.
+Aha! I was hoping youd ask (I mean, I'm the one writing these questions so...) this library provides a bunch of helpers which makes writing those functions you need super easy and super concise!
 
-If the value is a function then the value in the final object will be the result of applying that function to the input data. 
-
-You can set this to be any function you want, but the only argument it will receive is the input data.
-
-You can define whatever functions you like, which makes this schema very flexible, however this library provides a handful of helper functions to create functions that perform common operations.
+A quick note here too, If the value is *anything other than a function* then it will just be set as value of the corresponding key in the final object.
 
 ### get
 
@@ -314,6 +307,97 @@ describe('concat', () => {
       each('kids').map(getNameFromKid),
     )
     expect(familyNames(input)).toEqual(['Stephanie Miles', 'Pete Miles', 'Alice Miles'])
+  })
+})
+```
+
+## Summary
+
+Create a schema of key/value pairs.
+
+The keys define the data shape of your final data, the values are either functions or values, values will be simply set on the final output. Functions will be called on the input data and the result set to that value.
+
+Object-forge provides a handful of helpers documented above but you pass any function you want. Remember though that the only argument it will receive is the input data.
+
+Let's look at a more complicated schema/mapper to see what we can do with it.
+
+```javascript
+import create_mapper, { get, each, join, shape, using } from 'object-forge'
+
+
+describe('Create mapper', () => {
+  it('maps correctly', () => {
+    const input = {
+      firstName: 'pete',
+      lastName: 'jones',
+      currentAge: 15,
+      occupation: 'Retail',
+      email: 'pjones@gmail.com',
+      pets: [
+        {
+          type: 'cat',
+          name: 'bruce',
+          age: 13,
+        },
+        {
+          type: 'cat',
+          name: 'pickles',
+          age: 4,
+        },
+        {
+          type: 'dog',
+          name: 'buddy',
+          age: 9,
+        },
+      ],
+      address: {
+        streetNumber: '55',
+        streetName: 'Queen St',
+        city: 'Toronto',
+      },
+    }
+
+    const isType = type => pet => pet.type === type
+
+    const schema = {
+      age: get('currentAge'),
+      contact_information: shape({
+        email: get('email'),
+        street_address: join(['address.streetNumber', 'address.streetName', 'address.city'], ' '),
+      }),
+      dogAges: each('pets').where(isType('dog')).get('age'),
+      modifiedCats: each('pets').where(isType('cat')).shape({
+        description: cat => `${cat.name} the ${cat.age} year old cat`,
+        belongsToPete: true,
+      }),
+      modified: true,
+      name: join(['firstName', 'lastName'], '_'),
+      occupation: get('occupation'),
+    }
+
+    const mapper = create_mapper(schema)
+
+    expect(mapper(input)).toEqual({
+      age: 15,
+      contact_information: {
+        email: 'pjones@gmail.com',
+        street_address: '55 Queen St Toronto',
+      },
+      dogAges: [9],
+      modifiedCats: [
+        {
+          belongsToPete: true,
+          description: 'bruce the 13 year old cat',
+        },
+        {
+          belongsToPete: true,
+          description: 'pickles the 4 year old cat',
+        },
+      ],
+      modified: true,
+      name: 'pete_jones',
+      occupation: 'Retail',
+    })
   })
 })
 ```
