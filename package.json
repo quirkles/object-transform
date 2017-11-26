@@ -1,9 +1,13 @@
 {
   "name": "object-forge",
   "version": "0.0.4",
-  "description": "A library to facilitate massaging data",
+  "description": "A library to facilitate massaging data. Maps a dictionary of key value pairs to another via a user defined schema",
+  "keywords": ["map", "schema", "transform", "object"],
   "main": "dist/index.js",
   "repository": "git@github.com:quirkles/object-transform.git",
+  "bugs": {
+    "url" : "https://github.com/quirkles/object-transform/issues"
+  },
   "author": "quirkles",
   "license": "MIT",
   "dependencies": {
