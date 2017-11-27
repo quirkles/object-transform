@@ -14,6 +14,10 @@ var _get2 = require('./get');
 
 var _get3 = _interopRequireDefault(_get2);
 
+var _getOr = require('./getOr');
+
+var _getOr2 = _interopRequireDefault(_getOr);
+
 var _join2 = require('./join');
 
 var _join3 = _interopRequireDefault(_join2);
@@ -25,9 +29,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var getAttrAndFilter = function getAttrAndFilter(_ref) {
   var _ref2 = _slicedToArray(_ref, 2),
       attr = _ref2[0],
-      p = _ref2[1];
+      predicate = _ref2[1];
 
-  return (0, _ramda.pipe)(_utils.arrWrap, (0, _ramda.chain)((0, _get3.default)(attr, [])), _utils.filterNulls, (0, _ramda.filter)(p));
+  return (0, _ramda.pipe)(_utils.arrWrap, (0, _ramda.chain)((0, _getOr2.default)([], attr)), _utils.filterNulls, (0, _ramda.filter)(predicate));
 };
 
 var getItems = function getItems() {
@@ -50,9 +54,10 @@ var _each = function _each() {
     get: function get(_attr) {
       return (0, _ramda.pipe)(getItems(attrPath, predicates), (0, _ramda.map)((0, _get3.default)(_attr)));
     },
-    join: function join(toJoin) {
-      var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
-      return (0, _ramda.pipe)(getItems(attrPath, predicates), (0, _ramda.map)((0, _join3.default)(toJoin, separator)));
+    join: function join() {
+      var separator = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var toJoin = arguments[1];
+      return (0, _ramda.pipe)(getItems(attrPath, predicates), (0, _ramda.map)((0, _join3.default)(separator, toJoin)));
     },
     where: function where(predicate) {
       return _each(attrPath, (0, _utils.replaceLast)(predicate, predicates));

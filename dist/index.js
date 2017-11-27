@@ -41,8 +41,14 @@ var handleSchemaKey = function handleSchemaKey(input) {
   };
 };
 
-var createMapper = function createMapper(schema) {
-  return (0, _ramda.pipe)(handleSchemaKey, (0, _utils.fMap)(schema));
+var createMapper = function createMapper(schema, cb) {
+  return function (input) {
+    var result = (0, _ramda.map)(handleSchemaKey(input), schema);
+    if ((0, _utils.isFunction)(cb)) {
+      cb({ input: input, schema: schema, result: result });
+    }
+    return result;
+  };
 };
 
 exports.default = createMapper;

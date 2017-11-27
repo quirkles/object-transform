@@ -14,12 +14,12 @@ var _get2 = _interopRequireDefault(_get);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var getValues = function getValues(attrList) {
-  return (0, _utils.fMap)((0, _ramda.map)(_get2.default, attrList));
+var getValues = function getValues(attrs, input) {
+  return (0, _ramda.map)((0, _get2.default)(_ramda.__, input), attrs);
 };
 
-exports.default = function () {
-  var attrs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ' ';
-  return (0, _ramda.pipe)(_ramda.applyTo, getValues(attrs), _utils.filterNulls, (0, _utils.doIfNotEmpty)((0, _ramda.join)(separator)));
+var myJoin = function myJoin(separator, attrs, input) {
+  return (0, _ramda.join)(separator, (0, _utils.filterNulls)(getValues(attrs, input)));
 };
+
+exports.default = (0, _ramda.curry)(myJoin);
