@@ -1,8 +1,10 @@
-import { pipe, applyTo, map, join } from 'ramda'
+import { map, join, curry, __ } from 'ramda'
 
-import { filterNulls, fMap, doIfNotEmpty } from './utils'
+import { filterNulls } from './utils'
 import get from './get'
 
-const getValues = attrList => fMap(map(get, attrList))
+const getValues = (attrs, input) => map(get(__, input), attrs)
 
-export default (attrs = [], separator = ' ') => pipe(applyTo, getValues(attrs), filterNulls, doIfNotEmpty(join(separator)))
+const myJoin = (separator, attrs, input) => join(separator, filterNulls(getValues(attrs, input)))
+
+export default curry(myJoin)

@@ -35,7 +35,7 @@ describe('Create mapper', () => {
     const isType = type => pet => pet.type === type
 
     const schema = {
-      name: join(['firstName', 'lastName'], '_'),
+      name: join('_', ['firstName', 'lastName']),
       age: get('currentAge'),
       occupation: get('occupation'),
       dogAges: each('pets').where(isType('dog')).get('age'),
@@ -45,7 +45,7 @@ describe('Create mapper', () => {
       }),
       contact_information: shape({
         email: get('email'),
-        street_address: join(['address.streetNumber', 'address.streetName', 'address.city'], ' '),
+        street_address: join(' ', ['address.streetNumber', 'address.streetName', 'address.city']),
       }),
     }
 

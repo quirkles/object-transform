@@ -21,14 +21,6 @@ describe('Get', () => {
     const getSalary = get('job.salary')
     expect(getSalary(input)).toEqual(50000)
   })
-  it('Accepts a second argument that creates a default if not set', () => {
-    const input = {
-      name: 'sally',
-      age: 20,
-    }
-    const get_name = get('something', 'default')
-    expect(get_name(input)).toEqual('default')
-  })
   it('Returns null if no default is set', () => {
     const input = {
       name: 'sally',

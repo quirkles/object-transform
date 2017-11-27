@@ -160,11 +160,11 @@ describe('each', () => {
     })
     describe('join', () => {
       it('contains a join modifier to join attribues', () => {
-        const getNames = each('people').join(['firstName', 'lastName'])
+        const getNames = each('people').join(' ', ['firstName', 'lastName'])
         expect(getNames(input)).toEqual(['alex smith', 'lisa baker', 'danny jones'])
       })
       it('separator can be specified', () => {
-        const getNames = each('people').join(['firstName', 'lastName'], '-')
+        const getNames = each('people').join('-', ['firstName', 'lastName'])
         expect(getNames(input)).toEqual(['alex-smith', 'lisa-baker', 'danny-jones'])
       })
     })

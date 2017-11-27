@@ -1,3 +1,3 @@
-import { split, pathOr } from 'ramda'
+import getOr from './getOr'
 
-export default (attr = '', fallback = null) => pathOr(fallback, split('.', attr))
+export default getOr(null)

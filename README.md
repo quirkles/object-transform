@@ -89,12 +89,12 @@ A quick note here too, If the value is *anything other than a function* then it 
 ### get
 
 ````javascript
-get: (path: string, notSetValue?: any) => fn: (input: object) => value: any
+get: (path: string) => fn: (input: object) => value: any
 ````
 
-Returns a function that accepts an object and returns the value found at the path, or the notSetValue, if nothing is found.
+Returns a function that accepts an object and returns the value found at the path, or null, if nothing is found.
 
-The path is a string of dot seperated values to sequentially look up in the input object:
+The path is a string of dot separated values to sequentially look up in the input object:
 
 #### Usage
 
@@ -124,6 +124,49 @@ describe('Get', () => {
   })
 })
 ````
+
+### getOr  
+
+````javascript
+getOr: (notSetValue: any, path: string) => fn: (input: object) => value: any
+````
+
+Returns a function that accepts an object and returns the value found at the path, or the notSetValue, if nothing is found.
+
+The path is a string of dot separated values to sequentially look up in the input object.
+
+getOr is curried.
+
+#### Usage
+
+````javascript
+describe('GetOr', () => {
+  it('returns a function that takes a property from an input', () => {
+    const input = {
+      name: 'sally',
+      age: 20,
+    }
+    const getNameOrNukk = get(null, 'name')
+    expect(
+      getName(input)
+    ).toEqual('sally')
+  })
+  it('can read nested properties with dot notation', () => {
+    const input = {
+      name: 'sally',
+      age: 20,
+      job: {
+        name: 'scientist',
+        salary: 50000,
+      }
+    }
+    const getSalaryOrNull = get(null, 'job.salary')
+    expect(getSalary(input)).toEqual(50000)
+  })
+})
+````
+
+
 
 ### cast
 ````javascript
@@ -160,12 +203,14 @@ describe('cast', () => {
 ````
 ### join
 ```javascript
-join: (pathList: <string>, separator?: string) => fn: (input: object) => value: string
+join: (separator: string, pathList: <string>) => fn: (input: object) => value: string
 ```
 
-Accepts a list of attr paths and an optional separator string, returns a function that accepts an input the joins the results of looking up those attr paths on the input and joining with the provided separator which defaults to a space.
+Accepts a list of attr paths and an separator string, returns a function that accepts an input the joins the results of looking up those attr paths on the input and joining with the provided separator.
 
 The attr path is a list of strings of the same format you would use for get, you can use dot notation to get nested attributes.
+
+Join is curried
 #### Usage
 
 ```javascript
@@ -176,7 +221,7 @@ describe('Join', () => {
       middleName: 'mary',
       lastName: 'albright',
     }
-    const getName = join(['firstName', 'lastName'])
+    const getName = join(' ', ['firstName', 'lastName'])
     expect(getName(input)).toEqual('sally albright')
   })
 })
@@ -246,7 +291,7 @@ describe('Using', () => {
 each: (path: string) => {
   get : fn: (attr: string) => fn: (input: object) => values: <any>,,
   map: fn: (operator: (value: any) => modifiedValue: any) => fn: (input: object) => modifiedValues: <any>,
-  join: fn: (pathList: <string>, separator?: string) => fn: (input: object) => values: <string>
+  join: fn: (separator: string, pathList: <string>) => fn: (input: object) => values: <string>
   where: fn: (predicate: fn: (item: any) => result: boolean) => self,
   shape: fn: (schema: object) => fn: (input: object) => values: <any>,
   each: fn: (path: string) => self,
@@ -363,7 +408,7 @@ describe('Create mapper', () => {
       age: get('currentAge'),
       contact_information: shape({
         email: get('email'),
-        street_address: join(['address.streetNumber', 'address.streetName', 'address.city'], ' '),
+        street_address: join(' ', ['address.streetNumber', 'address.streetName', 'address.city']),
       }),
       dogAges: each('pets').where(isType('dog')).get('age'),
       modifiedCats: each('pets').where(isType('cat')).shape({
@@ -371,7 +416,7 @@ describe('Create mapper', () => {
         belongsToPete: true,
       }),
       modified: true,
-      name: join(['firstName', 'lastName'], '_'),
+      name: join('_', ['firstName', 'lastName']),
       occupation: get('occupation'),
     }
 

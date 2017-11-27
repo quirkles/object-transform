@@ -103,7 +103,7 @@ describe('using', () => {
     describe('shape', () => {
       it('has a shape method that allows easy mapping', () => {
         const newCarSchema = {
-          description: join(['make', 'model']),
+          description: join(' ', ['make', 'model']),
           mileage: get('distanceCovered'),
         }
         const car = using('family.car').shape(newCarSchema)
@@ -150,12 +150,12 @@ describe('using', () => {
     describe('shape', () => {
       it('has a shape method that allows easy mapping', () => {
         const newCarSchema = {
-          description: join(['make', 'model']),
+          description: join('', ['make', 'model']),
           mileage: get('distanceCovered'),
         }
         const car = using('family.car').shape(newCarSchema)
         expect(car(input)).toEqual({
-          description: null,
+          description: '',
           mileage: null,
         })
       })
