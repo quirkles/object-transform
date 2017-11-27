@@ -91,13 +91,34 @@ describe('Create mapper', () => {
       occupation: 'baller',
     }
     const toUpper = str => str.toUpperCase()
-    const transform = shape({
+    const transform = createMapper({
       occupation: using('occupation').do(toUpper),
       balls: true,
     })
-    expect(transform(input)).toEqual({
+    const expectedResult = {
       occupation: 'BALLER',
       balls: true,
+    }
+    expect(transform(input)).toEqual(expectedResult)
+  })
+  it('If passed optional callback, calls it with the expected args', () => {
+    const onTransform = jest.fn()
+    const input = {
+      occupation: 'baller',
+    }
+    const toUpper = str => str.toUpperCase()
+    const schema = {
+      occupation: using('occupation').do(toUpper),
+      balls: true,
+    }
+    const transform = createMapper(schema, onTransform)
+    const expectedResult = {
+      occupation: 'BALLER',
+      balls: true,
+    }
+    transform(input)
+    expect(onTransform).toHaveBeenCalledWith({
+      input, schema, result: expectedResult
     })
   })
 })

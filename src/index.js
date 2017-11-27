@@ -1,5 +1,5 @@
-import { applyTo, pipe } from 'ramda'
-import { fMap, isFunction } from './utils'
+import { map } from 'ramda'
+import { isFunction } from './utils'
 
 import _get from './get'
 import _each from './each'
@@ -10,7 +10,13 @@ import _cast from './cast'
 
 const handleSchemaKey = input => schemaVal => (isFunction(schemaVal) ? schemaVal(input) : schemaVal)
 
-const createMapper = schema => pipe(handleSchemaKey, fMap(schema))
+const createMapper = (schema, cb) => (input) => {
+  const result = map(handleSchemaKey(input), schema)
+  if (isFunction(cb)) {
+    cb({ input, schema, result })
+  }
+  return result
+}
 
 export default createMapper
 

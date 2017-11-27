@@ -82,7 +82,7 @@ const transformedData = ownerFullNameMapper(inputData) // { ownerFullName: 'Alic
 
 ## So, I still have to write all these functions? Isn't that what I have to do anyway?
 
-Aha! I was hoping youd ask (I mean, I'm the one writing these questions so...) this library provides a bunch of helpers which makes writing those functions you need super easy and super concise!
+Aha! I was hoping you'd ask (I mean, I'm the one writing these questions so...) this library provides a bunch of helpers which makes writing those functions you need super easy and super concise!
 
 A quick note here too, If the value is *anything other than a function* then it will just be set as value of the corresponding key in the final object.
 
@@ -355,6 +355,15 @@ describe('concat', () => {
   })
 })
 ```
+
+## createMapper
+````javascript
+concat: fn (schema: object, ?onTransform: fn: ({input: object, schema: object, result: object}) => output: any) => fn: (input: object) => result: object
+````
+
+Accepts a schema and an optional callBack that will be executed after the transform operation. Returns a function that accepts input data and performs the mapping described by the schema, returning the result.
+
+The callBack will receive one argument, a dictionary containing the input the mapper was called with, the schema used to validate it, and the result of the transform. This could be useful if you want to validate your data and log any differences, for example.
 
 ## Summary
 
