@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.shape = exports.cast = exports.concat = exports.using = exports.join = exports.each = exports.get = undefined;
+exports.shape = exports.cast = exports.concat = exports.using = exports.join = exports.each = exports.getOr = exports.get = undefined;
 
 var _ramda = require('ramda');
 
@@ -12,6 +12,10 @@ var _utils = require('./utils');
 var _get2 = require('./get');
 
 var _get3 = _interopRequireDefault(_get2);
+
+var _getOr2 = require('./getOr');
+
+var _getOr3 = _interopRequireDefault(_getOr2);
 
 var _each2 = require('./each');
 
@@ -53,6 +57,7 @@ var createMapper = function createMapper(schema, cb) {
 
 exports.default = createMapper;
 var get = exports.get = _get3.default;
+var getOr = exports.getOr = _getOr3.default;
 var each = exports.each = _each3.default;
 var join = exports.join = _join3.default;
 var using = exports.using = _using3.default;
