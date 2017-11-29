@@ -3,9 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.shape = exports.cast = exports.concat = exports.using = exports.join = exports.each = exports.getOr = exports.get = undefined;
-
-var _ramda = require('ramda');
+exports.shape = exports.extend = exports.cast = exports.concat = exports.using = exports.join = exports.each = exports.getOr = exports.get = undefined;
 
 var _utils = require('./utils');
 
@@ -37,17 +35,19 @@ var _cast2 = require('./cast');
 
 var _cast3 = _interopRequireDefault(_cast2);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _shape2 = require('./shape');
 
-var handleSchemaKey = function handleSchemaKey(input) {
-  return function (schemaVal) {
-    return (0, _utils.isFunction)(schemaVal) ? schemaVal(input) : schemaVal;
-  };
-};
+var _shape3 = _interopRequireDefault(_shape2);
+
+var _extend2 = require('./extend');
+
+var _extend3 = _interopRequireDefault(_extend2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var createMapper = function createMapper(schema, cb) {
   return function (input) {
-    var result = (0, _ramda.map)(handleSchemaKey(input), schema);
+    var result = (0, _shape3.default)(schema, input);
     if ((0, _utils.isFunction)(cb)) {
       cb({ input: input, schema: schema, result: result });
     }
@@ -63,4 +63,5 @@ var join = exports.join = _join3.default;
 var using = exports.using = _using3.default;
 var concat = exports.concat = _concat3.default;
 var cast = exports.cast = _cast3.default;
-var shape = exports.shape = createMapper;
+var extend = exports.extend = _extend3.default;
+var shape = exports.shape = _shape3.default;

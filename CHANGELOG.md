@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+#### Changes
+- Add docs for extend
+#### Author
+Quirkles
+
 ## 0.2.1
 #### Changes
 - Add extend export

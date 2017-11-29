@@ -254,6 +254,35 @@ describe('shape', () => {
   })
 })
 ```
+### Extend
+````javascript
+extend: (schema: object) => fn: (input: object) => result: object
+````
+
+Very similar to shape only instead extends the input and does to replace it. Conflicting values WILL be over written
+
+
+#### Usage
+
+```javascript
+describe('extend', () => {
+  const input = {
+    type: 'cat',
+    age: 13,
+    name: 'bruce',
+  }
+  const schema = {
+    description: pet => `${pet.name} the ${pet.age} year old ${pet.type}`
+  }
+  const extender = extend(schema)
+  expect(extender(input)).toEqual({
+    type: 'cat',
+    age: 13,
+    name: 'bruce',
+    description: 'bruce the 13 year old cat',
+  })
+})
+```
 ### using
 ````javascript
 using: (path: string) => {
